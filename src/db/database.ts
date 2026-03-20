@@ -35,23 +35,13 @@ export async function initializeDatabase(): Promise<void> {
   }
 }
 
-export async function clearWorkoutData(): Promise<void> {
-  await db.transaction(
-    'rw',
-    db.workouts,
-    db.workoutExercises,
-    db.sets,
-    db.bodyWeightEntries,
-    db.aiSummaries,
-    async () => {
-      await db.sets.clear();
-      await db.workoutExercises.clear();
-      await db.workouts.clear();
-      await db.bodyWeightEntries.clear();
-      await db.aiSummaries.clear();
-    }
-  );
-}
+ export async function clearWorkoutData(): Promise<void> {
+  await db.sets.clear();
+  await db.workoutExercises.clear();
+  await db.workouts.clear();
+  await db.bodyWeightEntries.clear();
+  await db.aiSummaries.clear();
+}   
 
 async function seedDefaultTemplates(): Promise<void> {
   const exercises = await db.exercises.toArray();
