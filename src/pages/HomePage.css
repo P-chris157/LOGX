@@ -1,0 +1,210 @@
+.home-page {
+  min-height: 100%;
+  padding: 24px 20px 120px;
+  color: #f5f7ff;
+  background: linear-gradient(180deg, #071033 0%, #040c26 100%);
+}
+
+.home-header {
+  margin-bottom: 20px;
+}
+
+.home-title {
+  margin: 0;
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.home-date {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: rgba(215, 223, 255, 0.68);
+}
+
+.hero-card {
+  background: rgba(26, 36, 68, 0.95);
+  border: 1px solid rgba(124, 144, 255, 0.12);
+  border-radius: 24px;
+  padding: 22px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 164, 28, 0.14);
+  color: #ffb347;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  margin: 0 0 8px;
+  font-size: 1.7rem;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+  margin: 0 0 18px;
+  color: rgba(215, 223, 255, 0.74);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.hero-button {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #5b88ff, #7aa2ff);
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 6px 20px rgba(91, 136, 255, 0.35);
+}
+
+.hero-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(91, 136, 255, 0.25);
+}
+
+.stats-section,
+.recent-section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  margin: 0 0 14px;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-link {
+  color: #7f99ff;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stats-grid.two-up {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.stat-card {
+  background: rgba(26, 36, 68, 0.92);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px 14px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: rgba(215, 223, 255, 0.7);
+}
+
+.recent-empty {
+  background: rgba(18, 28, 58, 0.78);
+  border: 1px dashed rgba(124, 144, 255, 0.18);
+  border-radius: 22px;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+.recent-empty-icon {
+  font-size: 1.5rem;
+  color: rgba(127, 153, 255, 0.7);
+  margin-bottom: 10px;
+}
+
+.recent-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.recent-empty-subtitle {
+  margin: 0;
+  color: rgba(215, 223, 255, 0.64);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.recent-workout-card {
+  background: rgba(21, 31, 59, 0.94);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 20px;
+  padding: 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.recent-workout-title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.recent-workout-date {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(215, 223, 255, 0.62);
+}
+
+.recent-workout-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(37, 175, 96, 0.14);
+  color: #4be18e;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.stats-grid.one-up {
+  grid-template-columns: 1fr;
+}
+
+.streak-card {
+  text-align: left;
+}
+
+.hero-meta {
+  margin: 0 0 16px;
+  color: rgba(215, 223, 255, 0.7);
+  font-size: 0.92rem;
+  font-weight: 600;
+}

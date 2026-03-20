@@ -1,0 +1,247 @@
+.history-page {
+  min-height: 100%;
+  padding: 24px 20px 120px;
+  color: #f5f7ff;
+  background: linear-gradient(180deg, #071033 0%, #040c26 100%);
+}
+
+.history-page .page-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: calc(8px + var(--safe-top));
+  margin-bottom: 20px;
+}
+
+.history-page .page-header h1 {
+  margin: 0;
+  font-size: 2.05rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.detail-header {
+  justify-content: space-between;
+}
+
+.detail-header-main {
+  flex: 1;
+}
+
+.back-btn,
+.delete-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(21, 31, 59, 0.94);
+  color: #dfe7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn {
+  color: #ff8b9a;
+}
+
+.workout-date {
+  display: inline-block;
+  margin-top: 8px;
+  color: rgba(215, 223, 255, 0.64);
+  font-size: 0.95rem;
+}
+
+.workout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workout-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 16px;
+  background: rgba(21, 31, 59, 0.94);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 20px;
+  text-align: left;
+  color: #f5f7ff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+}
+
+.workout-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.workout-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.history-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.history-summary-card {
+  background: rgba(21, 31, 59, 0.94);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 22px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+}
+
+.summary-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91, 136, 255, 0.12);
+  color: #7aa2ff;
+  margin-bottom: 12px;
+}
+
+.summary-value {
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.summary-label {
+  font-size: 0.88rem;
+  color: rgba(215, 223, 255, 0.64);
+}
+
+.history-summary-wide {
+  background: rgba(21, 31, 59, 0.94);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 22px;
+  padding: 18px 16px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-summary-wide-label {
+  color: rgba(215, 223, 255, 0.64);
+  font-weight: 700;
+}
+
+.history-summary-wide-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.workout-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-exercise {
+  background: rgba(21, 31, 59, 0.94);
+  border: 1px solid rgba(124, 144, 255, 0.1);
+  border-radius: 22px;
+  padding: 16px;
+}
+
+.detail-exercise-head {
+  margin-bottom: 12px;
+}
+
+.detail-exercise h3 {
+  margin: 0 0 6px;
+  font-size: 1.08rem;
+  font-weight: 800;
+}
+
+.detail-exercise-meta {
+  color: rgba(215, 223, 255, 0.62);
+  font-size: 0.9rem;
+}
+
+.detail-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-set {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(33, 45, 82, 0.86);
+  border-radius: 18px;
+  padding: 12px 14px;
+}
+
+.set-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(91, 136, 255, 0.12);
+  color: #9eb5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.set-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 12px;
+}
+
+.set-info {
+  font-weight: 700;
+  color: #eef2ff;
+}
+
+.rpe {
+  color: #aebdff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: rgba(215, 223, 255, 0.62);
+  padding: 60px 20px;
+}
+
+.empty-state svg {
+  margin-bottom: 16px;
+  opacity: 0.55;
+}
+
+.empty-state p {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #dfe7ff;
+}
+
+@media (max-width: 420px) {
+  .history-page {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

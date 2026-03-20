@@ -1,0 +1,59 @@
+.rest-pill {
+  position: fixed;
+  top: calc(var(--safe-top) + 12px);
+  right: 16px;
+  z-index: 120;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(18, 28, 58, 0.96);
+  border: 1px solid rgba(124, 144, 255, 0.14);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.rest-pill-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rest-pill-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(215, 223, 255, 0.62);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rest-pill-value {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #f5f7ff;
+}
+
+.rest-pill-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rest-pill-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(91, 136, 255, 0.1);
+  color: #cdd8ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rest-pill-close {
+  background: rgba(255, 106, 125, 0.12);
+  color: #ff8b9a;
+}
