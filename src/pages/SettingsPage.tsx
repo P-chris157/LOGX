@@ -3,6 +3,7 @@ import { Download, Upload, Trash2, AlertTriangle, Key, Scale, Timer, SunMoon } f
 import { getSettings, saveSettings, clearSettings } from '../utils/settings';
 import { exportAllData, importData, downloadFile } from '../utils/backup';
 import { clearWorkoutData } from '../db/database';
+import { getToday } from '../utils/date';
 import { importWorkoutFromText } from '../utils/importFromText';
 import './SettingsPage.css';
 
@@ -56,7 +57,7 @@ export function SettingsPage() {
   const handleExport = async () => {
     try {
       const data = await exportAllData();
-      const date = new Date().toISOString().split('T')[0];
+      const date = getToday();
       downloadFile(data, `logx-backup-${date}.json`);
       setMessage({ type: 'success', text: 'Backup downloaded successfully' });
     } catch {

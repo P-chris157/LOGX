@@ -165,12 +165,16 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(18, 28, 58, 0.98);
+
+  background: var(--bg-card);
   padding: 20px;
-  padding-bottom: calc(20px + var(--safe-bottom));
-  border-radius: 28px 28px 0 0;
-  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(124, 144, 255, 0.12);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom) + 80px);
+
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .add-new-form h3 {
@@ -183,12 +187,11 @@
 .add-new-form input,
 .add-new-form select {
   width: 100%;
-  height: 52px;
-  padding: 0 16px;
-  background: rgba(13, 21, 44, 0.9);
-  border: 1px solid rgba(124, 144, 255, 0.14);
-  border-radius: 14px;
-  color: #f5f7ff;
+  padding: 14px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
   margin-bottom: 12px;
   font-size: 16px;
 }
@@ -196,7 +199,13 @@
 .form-actions {
   display: flex;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 12px;
+
+  position: sticky;
+  bottom: 0;
+
+  background: var(--bg-card);
+  padding-top: 10px;
 }
 
 .btn-secondary {

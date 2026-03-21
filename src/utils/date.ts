@@ -1,5 +1,21 @@
+function parseLocalDate(date: Date | string): Date {
+  if (date instanceof Date) return date;
+
+  const isoDateOnly = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const match = date.match(isoDateOnly);
+
+  if (match) {
+    const year = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10) - 1;
+    const day = parseInt(match[3], 10);
+    return new Date(year, month, day);
+  }
+
+  return new Date(date);
+}
+
 export function formatDate(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const d = parseLocalDate(date);
   return d.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
@@ -8,7 +24,7 @@ export function formatDate(date: Date | string): string {
 }
 
 export function formatDateShort(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
+  const d = parseLocalDate(date);
   return d.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric'
@@ -22,7 +38,13 @@ export function formatTime(seconds: number): string {
 }
 
 export function getToday(): string {
-  return new Date().toISOString().split('T')[0];
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 export function getDayOfWeek(): string {
