@@ -1,5 +1,5 @@
 .weight-page {
-  padding: calc(20px + var(--safe-top)) 20px calc(140px + var(--safe-bottom));
+  padding-bottom: 100px;
 }
 
 .weight-page .page-header {
