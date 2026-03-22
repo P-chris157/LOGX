@@ -1,5 +1,5 @@
 .settings-page {
-  padding-bottom: 100px;
+  padding: calc(20px + var(--safe-top)) 20px calc(140px + var(--safe-bottom));
 }
 
 .settings-page .page-header {
