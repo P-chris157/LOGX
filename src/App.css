@@ -51,7 +51,6 @@ button {
   display: flex;
   flex-direction: column;
   background: var(--bg-dark);
-  padding-top: env(safe-area-inset-top);
 }
 
 .main-content {
