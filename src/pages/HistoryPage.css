@@ -1,6 +1,6 @@
 .history-page {
   min-height: 100%;
-  padding: 24px 20px 120px;
+  padding: calc(32px + env(safe-area-inset-top)) 20px 140px;
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }
