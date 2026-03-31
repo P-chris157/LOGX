@@ -1147,6 +1147,68 @@ interface ExerciseCardProps {
   lastAddedSetId: string | null;
 }
 
+function SwipeToDeleteRow({ children, onDelete }: { children: React.ReactNode; onDelete: () => void }) {
+  const [offsetX, setOffsetX] = React.useState(0);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const startX = React.useRef(0);
+  const currentX = React.useRef(0);
+  const THRESHOLD = -80;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startX.current = e.touches[0].clientX;
+    currentX.current = e.touches[0].clientX;
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const delta = e.touches[0].clientX - startX.current;
+    currentX.current = e.touches[0].clientX;
+    // Only allow swiping left
+    if (delta < 0) setOffsetX(Math.max(delta, -100));
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    if (offsetX < THRESHOLD) {
+      // Snap to fully open
+      setOffsetX(-100);
+      haptic('light');
+    } else {
+      // Snap back
+      setOffsetX(0);
+    }
+  };
+
+  const handleDelete = () => {
+    haptic('medium');
+    onDelete();
+    setOffsetX(0);
+  };
+
+  return (
+    <div className="swipe-row-wrapper">
+      <div className="swipe-row-delete-bg">
+        <button className="swipe-delete-btn" onClick={handleDelete}>
+          <Trash2 size={18} />
+          <span>Delete</span>
+        </button>
+      </div>
+      <div
+        className="swipe-row-content"
+        style={{
+          transform: `translateX(${offsetX}px)`,
+          transition: isDragging ? 'none' : 'transform 0.25s ease',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function ExerciseCard({
   exercise,
   sets,
@@ -1164,6 +1226,8 @@ function ExerciseCard({
   const [reps, setReps] = useState('');
   const [weight, setWeight] = useState('');
   const [rpe, setRpe] = useState('');
+  const weightRef = React.useRef<HTMLInputElement>(null);
+  const repsRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (previousSets.length > 0 && sets.length < previousSets.length) {
@@ -1175,6 +1239,13 @@ function ExerciseCard({
     }
   }, [previousSets, sets.length]);
 
+  // Auto-focus weight input when card expands
+  useEffect(() => {
+    if (isExpanded) {
+      window.setTimeout(() => weightRef.current?.focus(), 300);
+    }
+  }, [isExpanded]);
+
   const handleAddSet = () => {
     const r = parseInt(reps) || 0;
     const w = parseFloat(weight) || 0;
@@ -1182,16 +1253,34 @@ function ExerciseCard({
 
     if (r > 0) {
       onAddSet(r, w, p);
-      haptic('medium'); // ADD THIS HERE
+      haptic('medium');
+      setRpe('');
 
+      // Pre-fill next set from previous workout
       if (previousSets.length > sets.length + 1) {
         const nextPrevSet = previousSets[sets.length + 1];
         setWeight(nextPrevSet.weight.toString());
         setReps(nextPrevSet.reps.toString());
       }
 
-      setRpe('');
+      // Auto-focus weight input for next set
+      window.setTimeout(() => weightRef.current?.focus(), 100);
     }
+  };
+
+  const adjustWeight = (delta: number) => {
+    const current = parseFloat(weight) || 0;
+    const next = Math.max(0, current + delta);
+    // Round to nearest 0.5
+    setWeight((Math.round(next * 2) / 2).toString());
+    haptic('light');
+  };
+
+  const adjustReps = (delta: number) => {
+    const current = parseInt(reps) || 0;
+    const next = Math.max(1, current + delta);
+    setReps(next.toString());
+    haptic('light');
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -1199,6 +1288,8 @@ function ExerciseCard({
       e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 250);
   };
+
+  const weightStep = units === 'kg' ? 2.5 : 5;
 
   return (
     <div className={`exercise-card ${isExpanded ? 'expanded' : ''}`}>
@@ -1222,27 +1313,47 @@ function ExerciseCard({
               ))}
             </div>
           )}
-f
+
           <div className="sets-list">
-            {sets.map((set, idx) => (
-              <div
-                key={set.id}
-                className={`set-row ${lastAddedSetId === set.id ? 'set-row-new' : ''}`}
-              >
-                <span className="set-number">{idx + 1}</span>
-                <span className="set-weight">{set.weight} {units}</span>
-                <span className="set-reps">× {set.reps}</span>
-                {set.rpe && <span className="set-rpe">@{set.rpe}</span>}
-                {prSetIds.includes(set.id) && <span className="set-pr">PR</span>}
-                <button className="delete-set" onClick={() => onDeleteSet(set.id)}>
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))}
+  {sets.map((set, idx) => (
+    <SwipeToDeleteRow key={set.id} onDelete={() => onDeleteSet(set.id)}>
+      <div className={`set-row ${lastAddedSetId === set.id ? 'set-row-new' : ''}`}>
+        <span className="set-number">{idx + 1}</span>
+        <span className="set-weight">{set.weight} {units}</span>
+        <span className="set-reps">× {set.reps}</span>
+        {set.rpe && <span className="set-rpe">@{set.rpe}</span>}
+        {prSetIds.includes(set.id) && <span className="set-pr">PR</span>}
+        <button className="delete-set" onClick={() => onDeleteSet(set.id)}>
+          <Trash2 size={16} />
+        </button>
+      </div>
+    </SwipeToDeleteRow>
+  ))}
+</div>
+
+          {/* Weight presets */}
+          <div className="preset-row">
+            <span className="preset-label">Weight</span>
+            <div className="preset-btns">
+              <button className="preset-btn" onClick={() => adjustWeight(-weightStep)}>-{weightStep}</button>
+              <button className="preset-btn" onClick={() => adjustWeight(-1)}>-1</button>
+              <button className="preset-btn" onClick={() => adjustWeight(1)}>+1</button>
+              <button className="preset-btn" onClick={() => adjustWeight(weightStep)}>+{weightStep}</button>
+            </div>
+          </div>
+
+          {/* Reps presets */}
+          <div className="preset-row">
+            <span className="preset-label">Reps</span>
+            <div className="preset-btns">
+              <button className="preset-btn" onClick={() => adjustReps(-1)}>-1</button>
+              <button className="preset-btn" onClick={() => adjustReps(1)}>+1</button>
+            </div>
           </div>
 
           <div className="add-set-form">
             <input
+              ref={weightRef}
               type="number"
               placeholder="Weight"
               value={weight}
@@ -1254,6 +1365,7 @@ f
             <span className="input-unit">{units}</span>
             <span className="input-x">×</span>
             <input
+              ref={repsRef}
               type="number"
               placeholder="Reps"
               value={reps}

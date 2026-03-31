@@ -28,6 +28,20 @@ function App() {
     init();
   }, []);
 
+  useEffect(() => {
+  const handleViewportResize = () => {
+    const active = document.activeElement as HTMLElement;
+    if (!active || !['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) return;
+    
+    window.setTimeout(() => {
+      active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
+  window.visualViewport?.addEventListener('resize', handleViewportResize);
+  return () => window.visualViewport?.removeEventListener('resize', handleViewportResize);
+}, []);
+
   if (isLoading) {
     return (
       <div className="loading-screen">

@@ -918,3 +918,85 @@
     border-radius: 22px;
   }
 }
+
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.preset-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(215, 223, 255, 0.5);
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.preset-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.preset-btn {
+  height: 36px;
+  padding: 0 14px;
+  background: rgba(33, 45, 82, 0.92);
+  border-radius: 10px;
+  color: #cdd8ff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.preset-btn:active {
+  transform: scale(0.95);
+  background: rgba(91, 136, 255, 0.2);
+}
+
+.swipe-row-wrapper {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.swipe-row-delete-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: rgba(255, 106, 125, 0.18);
+  border-radius: 18px;
+  padding-right: 4px;
+}
+
+.swipe-delete-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 80px;
+  height: 100%;
+  color: #ff8b9a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.swipe-row-content {
+  position: relative;
+  z-index: 1;
+  border-radius: 18px;
+}
+
+/* Remove margin-bottom from set-row since wrapper handles it */
+.swipe-row-wrapper .set-row {
+  margin-bottom: 0;
+}

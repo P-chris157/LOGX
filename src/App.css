@@ -88,3 +88,9 @@ button {
     transform: rotate(360deg);
   }
 }
+
+@supports (height: 100dvh) {
+  .main-content {
+    height: 100dvh;
+  }
+}
