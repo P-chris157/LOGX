@@ -1,6 +1,6 @@
 .home-page {
   min-height: 100%;
-   padding: calc(34px + var(--safe-top)) 20px calc(120px + var(--safe-bottom));
+  padding: calc(34px + env(safe-area-inset-top)) 20px calc(120px + env(safe-area-inset-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }

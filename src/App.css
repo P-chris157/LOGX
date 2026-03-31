@@ -55,16 +55,11 @@ button {
 
 .main-content {
   flex: 1;
-  
-  border-top: 4px solid red;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-
-  /* Constrain the scroll container to the safe viewport */
-  height: 100%;
-  padding-top: var(--safe-top);
-  padding-bottom: calc(72px + var(--safe-bottom)); /* nav height + bottom safe area */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
