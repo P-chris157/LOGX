@@ -1,13 +1,13 @@
 .home-page {
   min-height: 100%;
-  padding: calc(24px + env(safe-area-inset-top)) 20px 120px;
+  padding: calc(34px + var(--safe-top)) 20px calc(120px + var(--safe-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }
 
 .home-header {
   margin-bottom: 20px;
-  padding-top: 8px;
+  padding-top: 0;
 }
 
 .home-title {

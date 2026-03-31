@@ -1,6 +1,6 @@
 .history-page {
   min-height: 100%;
-  padding: 24px 20px 120px;
+  padding: calc(34px + var(--safe-top)) 20px calc(120px + var(--safe-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }
@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding-top: calc(8px + var(--safe-top));
+  padding-top: 0;
   margin-bottom: 20px;
 }
 
@@ -243,5 +243,6 @@
   .history-page {
     padding-left: 16px;
     padding-right: 16px;
+    padding-bottom: calc(120px + var(--safe-bottom));
   }
 }

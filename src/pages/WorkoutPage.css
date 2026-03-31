@@ -1,6 +1,6 @@
 .workout-page {
   min-height: 100%;
-  padding: 24px 20px 180px;
+  padding: calc(34px + var(--safe-top)) 20px calc(180px + var(--safe-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }
@@ -11,7 +11,7 @@
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 20px;
-  padding-top: calc(8px + var(--safe-top));
+  padding-top: 0;
 }
 
 .page-header h1 {
@@ -632,15 +632,19 @@
   align-items: flex-end;
   justify-content: center;
   padding: 20px;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom) + 88px);
+  padding-top: calc(20px + var(--safe-top));
+  padding-bottom: calc(20px + var(--safe-bottom) + 88px);
   z-index: 220;
+  overflow: hidden;
 }
 
 .sheet-card {
   width: 100%;
   max-width: 420px;
-  max-height: min(78vh, 720px);
+  max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 120px);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   background: rgba(18, 28, 58, 0.98);
   border: 1px solid rgba(124, 144, 255, 0.14);
   border-radius: 24px;
@@ -650,7 +654,7 @@
 }
 
 .sheet-card.large {
-  max-height: min(82vh, 760px);
+  max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 110px);
 }
 
 .sheet-head {
@@ -880,11 +884,11 @@
 }
 
 @media (max-width: 420px) {
-  .workout-page {
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 180px;
-  }
+.workout-page {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: calc(180px + var(--safe-bottom));
+}
 
   .page-header h1 {
     font-size: 1.9rem;

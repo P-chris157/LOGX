@@ -13,11 +13,13 @@ export function RestTimer({ isActive, onClose }: Props) {
   const settings = getSettings();
   const [timeLeft, setTimeLeft] = useState(settings.timerDuration);
   const [isRunning, setIsRunning] = useState(true);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     if (!isActive) {
       setTimeLeft(settings.timerDuration);
       setIsRunning(true);
+      setIsDone(false);
     }
   }, [isActive, settings.timerDuration]);
 
@@ -28,6 +30,7 @@ export function RestTimer({ isActive, onClose }: Props) {
       setTimeLeft(t => {
         if (t <= 1) {
           setIsRunning(false);
+          setIsDone(true);
           if (navigator.vibrate) {
             navigator.vibrate([200, 100, 200]);
           }
@@ -43,19 +46,26 @@ export function RestTimer({ isActive, onClose }: Props) {
   const handleReset = useCallback(() => {
     setTimeLeft(settings.timerDuration);
     setIsRunning(true);
+    setIsDone(false);
   }, [settings.timerDuration]);
 
   const handleToggle = useCallback(() => {
+    if (isDone) {
+      handleReset();
+      return;
+    }
     setIsRunning(r => !r);
-  }, []);
+  }, [isDone, handleReset]);
 
   if (!isActive) return null;
 
   return (
-    <div className="rest-pill">
+    <div className={`rest-pill ${isDone ? 'done' : ''}`}>
       <div className="rest-pill-main">
-        <span className="rest-pill-label">Rest</span>
-        <span className="rest-pill-value">{formatTime(timeLeft)}</span>
+        <span className="rest-pill-label">{isDone ? 'Rest' : 'Rest'}</span>
+        <span className="rest-pill-value">
+          {isDone ? 'Timer done' : formatTime(timeLeft)}
+        </span>
       </div>
 
       <div className="rest-pill-actions">
