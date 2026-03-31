@@ -566,7 +566,6 @@ export function WorkoutPage() {
     exerciseId: string,
     reps: number,
     weight: number,
-    rpe?: number
   ) => {
     const existingSets = await db.sets.where('workoutExerciseId').equals(workoutExerciseId).count();
 
@@ -576,7 +575,6 @@ export function WorkoutPage() {
       setNumber: existingSets + 1,
       reps,
       weight,
-      rpe,
       completedAt: new Date().toISOString()
     };
 
@@ -611,7 +609,7 @@ export function WorkoutPage() {
   const repeatLastSet = async (workoutExerciseId: string, exerciseId: string, sets: WorkoutSet[]) => {
     if (sets.length === 0) return;
     const lastSet = sets[sets.length - 1];
-    await addSet(workoutExerciseId, exerciseId, lastSet.reps, lastSet.weight, lastSet.rpe);
+    await addSet(workoutExerciseId, exerciseId, lastSet.reps, lastSet.weight);
   };
 
   if (!activeWorkout) {
@@ -944,7 +942,7 @@ export function WorkoutPage() {
             onToggle={() =>
               setExpandedExercise(expandedExercise === workoutExercise.id ? null : workoutExercise.id)
             }
-            onAddSet={(reps, weight, rpe) => addSet(workoutExercise.id, exercise.id, reps, weight, rpe)}
+            onAddSet={(reps, weight) => addSet(workoutExercise.id, exercise.id, reps, weight)}
             onDeleteSet={deleteSet}
             onRepeatLast={() => repeatLastSet(workoutExercise.id, exercise.id, sets)}
             onRemove={() => removeExercise(workoutExercise.id)}
@@ -1138,7 +1136,7 @@ interface ExerciseCardProps {
   previousSets: WorkoutSet[];
   isExpanded: boolean;
   onToggle: () => void;
-  onAddSet: (reps: number, weight: number, rpe?: number) => void;
+  onAddSet: (reps: number, weight: number,) => void;
   onDeleteSet: (id: string) => void;
   onRepeatLast: () => void;
   onRemove: () => void;
@@ -1225,9 +1223,7 @@ function ExerciseCard({
 }: ExerciseCardProps) {
   const [reps, setReps] = useState('');
   const [weight, setWeight] = useState('');
-  const [rpe, setRpe] = useState('');
   const weightRef = React.useRef<HTMLInputElement>(null);
-  const repsRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (previousSets.length > 0 && sets.length < previousSets.length) {
@@ -1239,7 +1235,6 @@ function ExerciseCard({
     }
   }, [previousSets, sets.length]);
 
-  // Auto-focus weight input when card expands
   useEffect(() => {
     if (isExpanded) {
       window.setTimeout(() => weightRef.current?.focus(), 300);
@@ -1249,38 +1244,19 @@ function ExerciseCard({
   const handleAddSet = () => {
     const r = parseInt(reps) || 0;
     const w = parseFloat(weight) || 0;
-    const p = rpe ? parseInt(rpe) : undefined;
 
     if (r > 0) {
-      onAddSet(r, w, p);
+      onAddSet(r, w);
       haptic('medium');
-      setRpe('');
 
-      // Pre-fill next set from previous workout
       if (previousSets.length > sets.length + 1) {
         const nextPrevSet = previousSets[sets.length + 1];
         setWeight(nextPrevSet.weight.toString());
         setReps(nextPrevSet.reps.toString());
       }
 
-      // Auto-focus weight input for next set
       window.setTimeout(() => weightRef.current?.focus(), 100);
     }
-  };
-
-  const adjustWeight = (delta: number) => {
-    const current = parseFloat(weight) || 0;
-    const next = Math.max(0, current + delta);
-    // Round to nearest 0.5
-    setWeight((Math.round(next * 2) / 2).toString());
-    haptic('light');
-  };
-
-  const adjustReps = (delta: number) => {
-    const current = parseInt(reps) || 0;
-    const next = Math.max(1, current + delta);
-    setReps(next.toString());
-    haptic('light');
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -1288,8 +1264,6 @@ function ExerciseCard({
       e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 250);
   };
-
-  const weightStep = units === 'kg' ? 2.5 : 5;
 
   return (
     <div className={`exercise-card ${isExpanded ? 'expanded' : ''}`}>
@@ -1315,40 +1289,20 @@ function ExerciseCard({
           )}
 
           <div className="sets-list">
-  {sets.map((set, idx) => (
-    <SwipeToDeleteRow key={set.id} onDelete={() => onDeleteSet(set.id)}>
-      <div className={`set-row ${lastAddedSetId === set.id ? 'set-row-new' : ''}`}>
-        <span className="set-number">{idx + 1}</span>
-        <span className="set-weight">{set.weight} {units}</span>
-        <span className="set-reps">× {set.reps}</span>
-        {set.rpe && <span className="set-rpe">@{set.rpe}</span>}
-        {prSetIds.includes(set.id) && <span className="set-pr">PR</span>}
-        <button className="delete-set" onClick={() => onDeleteSet(set.id)}>
-          <Trash2 size={16} />
-        </button>
-      </div>
-    </SwipeToDeleteRow>
-  ))}
-</div>
-
-          {/* Weight presets */}
-          <div className="preset-row">
-            <span className="preset-label">Weight</span>
-            <div className="preset-btns">
-              <button className="preset-btn" onClick={() => adjustWeight(-weightStep)}>-{weightStep}</button>
-              <button className="preset-btn" onClick={() => adjustWeight(-1)}>-1</button>
-              <button className="preset-btn" onClick={() => adjustWeight(1)}>+1</button>
-              <button className="preset-btn" onClick={() => adjustWeight(weightStep)}>+{weightStep}</button>
-            </div>
-          </div>
-
-          {/* Reps presets */}
-          <div className="preset-row">
-            <span className="preset-label">Reps</span>
-            <div className="preset-btns">
-              <button className="preset-btn" onClick={() => adjustReps(-1)}>-1</button>
-              <button className="preset-btn" onClick={() => adjustReps(1)}>+1</button>
-            </div>
+            {sets.map((set, idx) => (
+              <div
+                key={set.id}
+                className={`set-row ${lastAddedSetId === set.id ? 'set-row-new' : ''}`}
+              >
+                <span className="set-number">{idx + 1}</span>
+                <span className="set-weight">{set.weight} {units}</span>
+                <span className="set-reps">× {set.reps}</span>
+                {prSetIds.includes(set.id) && <span className="set-pr">PR</span>}
+                <button className="delete-set" onClick={() => onDeleteSet(set.id)}>
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
           </div>
 
           <div className="add-set-form">
@@ -1365,24 +1319,12 @@ function ExerciseCard({
             <span className="input-unit">{units}</span>
             <span className="input-x">×</span>
             <input
-              ref={repsRef}
               type="number"
               placeholder="Reps"
               value={reps}
               onChange={e => setReps(e.target.value)}
               className="input-reps"
               inputMode="numeric"
-              onFocus={handleFocus}
-            />
-            <input
-              type="number"
-              placeholder="RPE"
-              value={rpe}
-              onChange={e => setRpe(e.target.value)}
-              className="input-rpe"
-              inputMode="numeric"
-              min="1"
-              max="10"
               onFocus={handleFocus}
             />
             <button className="add-set-btn" onClick={handleAddSet}>
