@@ -275,3 +275,77 @@
 .picker-empty-state span {
   font-size: 0.92rem;
 }
+
+.exercise-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.exercise-item-row .exercise-item {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.exercise-delete-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 106, 125, 0.1);
+  color: #ff8b9a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-shrink: 0;
+}
+
+.delete-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 24px;
+}
+
+.delete-confirm-card {
+  background: rgba(18, 28, 58, 0.98);
+  border: 1px solid rgba(124, 144, 255, 0.14);
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.delete-confirm-card h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #f5f7ff;
+  margin-bottom: 10px;
+}
+
+.delete-confirm-card p {
+  font-size: 0.92rem;
+  color: rgba(215, 223, 255, 0.64);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-danger {
+  flex: 1;
+  height: 50px;
+  background: #ff6a7d;
+  border-radius: 14px;
+  color: white;
+  font-weight: 700;
+  border: none;
+}

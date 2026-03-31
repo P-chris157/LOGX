@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, X, Check, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Search, Plus, X, Check, ChevronRight, ChevronLeft, Trash2 } from 'lucide-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/database';
 import type { Exercise } from '../types';
 import { v4 as uuid } from 'uuid';
+import { haptic } from '../utils/haptics';
 import './ExercisePicker.css';
 
 interface Props {
@@ -13,17 +14,8 @@ interface Props {
 }
 
 const MUSCLE_GROUPS = [
-  'Chest',
-  'Back',
-  'Shoulders',
-  'Legs',
-  'Biceps',
-  'Triceps',
-  'Core',
-  'Glutes',
-  'Calves',
-  'Cardio',
-  'Forearms'
+  'Chest', 'Back', 'Shoulders', 'Legs', 'Biceps',
+  'Triceps', 'Core', 'Glutes', 'Calves', 'Cardio', 'Forearms'
 ];
 
 export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
@@ -31,6 +23,7 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [showAddNew, setShowAddNew] = useState(false);
   const [newExercise, setNewExercise] = useState({ name: '', muscleGroup: 'Chest', equipment: 'Barbell' });
+  const [confirmDelete, setConfirmDelete] = useState<Exercise | null>(null);
 
   const exercises = useLiveQuery(() => db.exercises.toArray(), []);
 
@@ -41,7 +34,6 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
 
   const filteredExercises = useMemo(() => {
     if (!availableExercises || !selectedGroup) return [];
-
     return availableExercises
       .filter(e => e.muscleGroup === selectedGroup)
       .filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
@@ -58,6 +50,7 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
 
   const handleAddExercise = async () => {
     if (!newExercise.name.trim()) return;
+    haptic('medium');
 
     const exercise: Exercise = {
       id: uuid(),
@@ -73,6 +66,19 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
     onSelect(exercise);
   };
 
+  const handleDeleteExercise = async (exercise: Exercise) => {
+    haptic('warning');
+    // Remove the exercise and any workout data referencing it
+    const workoutExercises = await db.workoutExercises.where('exerciseId').equals(exercise.id).toArray();
+    for (const we of workoutExercises) {
+      await db.sets.where('workoutExerciseId').equals(we.id).delete();
+    }
+    await db.workoutExercises.where('exerciseId').equals(exercise.id).delete();
+    await db.exercises.delete(exercise.id);
+    setConfirmDelete(null);
+    haptic('success');
+  };
+
   return (
     <div className="picker-overlay">
       <div className="picker-modal">
@@ -80,18 +86,17 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
           <div className="picker-header-left">
             {selectedGroup && !showAddNew && (
               <button
-                onClick={() => {
-                  setSelectedGroup(null);
-                  setSearch('');
-                }}
+                onClick={() => { setSelectedGroup(null); setSearch(''); haptic('light'); }}
                 className="back-btn"
               >
                 <ChevronLeft size={20} />
               </button>
             )}
-            <h2>{showAddNew ? 'Add Exercise' : selectedGroup ? selectedGroup : 'Select Exercise'}</h2>
+            <h2>{showAddNew ? 'Add Exercise' : selectedGroup ?? 'Select Exercise'}</h2>
           </div>
-          <button onClick={onClose} className="close-btn"><X size={24} /></button>
+          <button onClick={() => { haptic('light'); onClose(); }} className="close-btn">
+            <X size={24} />
+          </button>
         </div>
 
         {!showAddNew && (
@@ -111,7 +116,7 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
             <div className="exercise-list">
               {!selectedGroup ? (
                 <>
-                  <button className="add-new-btn" onClick={() => setShowAddNew(true)}>
+                  <button className="add-new-btn" onClick={() => { haptic('light'); setShowAddNew(true); }}>
                     <Plus size={20} />
                     <span>Add New Exercise</span>
                   </button>
@@ -120,7 +125,7 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
                     <button
                       key={group}
                       className="exercise-item group-item"
-                      onClick={() => setSelectedGroup(group)}
+                      onClick={() => { haptic('light'); setSelectedGroup(group); }}
                     >
                       <div className="exercise-info">
                         <span className="exercise-name">{group}</span>
@@ -132,23 +137,32 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
                 </>
               ) : (
                 <>
-                  <button className="add-new-btn" onClick={() => setShowAddNew(true)}>
+                  <button className="add-new-btn" onClick={() => { haptic('light'); setShowAddNew(true); }}>
                     <Plus size={20} />
                     <span>Add New Exercise</span>
                   </button>
 
                   {filteredExercises.map(exercise => (
-                    <button
-                      key={exercise.id}
-                      className="exercise-item"
-                      onClick={() => onSelect(exercise)}
-                    >
-                      <div className="exercise-info">
-                        <span className="exercise-name">{exercise.name}</span>
-                        <span className="exercise-meta">{exercise.muscleGroup} • {exercise.equipment}</span>
-                      </div>
-                      {exercise.isCustom && <span className="custom-badge">Custom</span>}
-                    </button>
+                    <div key={exercise.id} className="exercise-item-row">
+                      <button
+                        className="exercise-item"
+                        onClick={() => { haptic('medium'); onSelect(exercise); }}
+                      >
+                        <div className="exercise-info">
+                          <span className="exercise-name">{exercise.name}</span>
+                          <span className="exercise-meta">{exercise.muscleGroup} • {exercise.equipment}</span>
+                        </div>
+                        {exercise.isCustom && <span className="custom-badge">Custom</span>}
+                      </button>
+
+                      <button
+                        className="exercise-delete-btn"
+                        onClick={e => { e.stopPropagation(); haptic('light'); setConfirmDelete(exercise); }}
+                        aria-label={`Delete ${exercise.name}`}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   ))}
 
                   {filteredExercises.length === 0 && (
@@ -171,14 +185,13 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
               placeholder="Exercise name"
               value={newExercise.name}
               onChange={e => setNewExercise({ ...newExercise, name: e.target.value })}
+              autoFocus
             />
             <select
               value={newExercise.muscleGroup}
               onChange={e => setNewExercise({ ...newExercise, muscleGroup: e.target.value })}
             >
-              {MUSCLE_GROUPS.map(mg => (
-                <option key={mg} value={mg}>{mg}</option>
-              ))}
+              {MUSCLE_GROUPS.map(mg => <option key={mg} value={mg}>{mg}</option>)}
             </select>
             <select
               value={newExercise.equipment}
@@ -197,6 +210,20 @@ export function ExercisePicker({ onSelect, onClose, excludeIds = [] }: Props) {
           </div>
         )}
       </div>
+
+      {/* Delete confirmation */}
+      {confirmDelete && (
+        <div className="delete-confirm-overlay" onClick={() => setConfirmDelete(null)}>
+          <div className="delete-confirm-card" onClick={e => e.stopPropagation()}>
+            <h3>Delete "{confirmDelete.name}"?</h3>
+            <p>This will also remove it from any workouts it appears in. This can't be undone.</p>
+            <div className="delete-confirm-actions">
+              <button className="btn-secondary" onClick={() => setConfirmDelete(null)}>Cancel</button>
+              <button className="btn-danger" onClick={() => handleDeleteExercise(confirmDelete)}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

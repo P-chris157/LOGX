@@ -20,6 +20,7 @@ import type { Workout, WorkoutExercise, WorkoutSet, Exercise, Template, Template
 import { v4 as uuid } from 'uuid';
 import { getToday } from '../utils/date';
 import { getSettings } from '../utils/settings';
+import { haptic } from '../utils/haptics';
 import { ExercisePicker } from '../components/ExercisePicker';
 import { RestTimer } from '../components/RestTimer';
 import './WorkoutPage.css';
@@ -480,6 +481,7 @@ export function WorkoutPage() {
 
   const finishWorkout = async () => {
     if (!activeWorkout) return;
+    haptic('success'); // ADD THIS HERE
 
     const workoutExerciseRows = await db.workoutExercises.where('workoutId').equals(activeWorkout.id).toArray();
     const workoutExerciseIds = workoutExerciseRows.map(we => we.id);
@@ -589,6 +591,8 @@ export function WorkoutPage() {
       setPrSetIds(prev => [...prev, set.id]);
     }
 
+    haptic(pr ? 'success' : 'light'); // ADD THIS HERE
+
     if (settings.timerEnabled) {
       setShowTimer(true);
     }
@@ -599,6 +603,7 @@ export function WorkoutPage() {
   };
 
   const deleteSet = async (setId: string) => {
+    haptic('light'); // ADD THIS HERE
     await db.sets.delete(setId);
     setPrSetIds(prev => prev.filter(id => id !== setId));
   };
@@ -1177,6 +1182,7 @@ function ExerciseCard({
 
     if (r > 0) {
       onAddSet(r, w, p);
+      haptic('medium'); // ADD THIS HERE
 
       if (previousSets.length > sets.length + 1) {
         const nextPrevSet = previousSets[sets.length + 1];
@@ -1216,7 +1222,7 @@ function ExerciseCard({
               ))}
             </div>
           )}
-
+f
           <div className="sets-list">
             {sets.map((set, idx) => (
               <div
