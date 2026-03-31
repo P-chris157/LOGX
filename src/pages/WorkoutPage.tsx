@@ -899,31 +899,33 @@ export function WorkoutPage() {
     <div className="page workout-page">
       <RestTimer isActive={showTimer} onClose={() => setShowTimer(false)} />
 
-      <div className="page-header" style={{ paddingTop: showTimer ? '80px' : undefined }}>
-        <div>
-          <h1>{activeWorkout.name}</h1>
-          <div className="workout-meta-row">
-            <span className="workout-date">{getToday()}</span>
-            <span className="workout-live-timer">{formattedElapsed}</span>
-          </div>
-        </div>
-
-        <div className="workout-header-actions">
-          {activeWorkout.templateId && (
-            <button className="save-template-pill" onClick={updateCurrentTemplateFromWorkout}>
-              <RefreshCcw size={16} />
-              <span>Update Template</span>
-            </button>
-          )}
-          <button className="save-template-pill" onClick={openSaveCurrentAsTemplate}>
-            <Save size={16} />
-            <span>Save Template</span>
-          </button>
-          <button className="finish-btn" onClick={finishWorkout}>
-            <Check size={20} /> Finish
-          </button>
-        </div>
+      <div className="page-header">
+  <div className="workout-header-top">
+    <div>
+      <h1>{activeWorkout.name}</h1>
+      <div className="workout-meta-row">
+        <span className="workout-date">{getToday()}</span>
+        <span className="workout-live-timer">{formattedElapsed}</span>
       </div>
+    </div>
+  </div>
+
+  <div className="workout-header-actions">
+    {activeWorkout.templateId && (
+      <button className="save-template-pill" onClick={updateCurrentTemplateFromWorkout}>
+        <RefreshCcw size={16} />
+        <span>Update Template</span>
+      </button>
+    )}
+    <button className="save-template-pill" onClick={openSaveCurrentAsTemplate}>
+      <Save size={16} />
+      <span>Save Template</span>
+    </button>
+    <button className="finish-btn" onClick={finishWorkout}>
+      <Check size={20} /> Finish
+    </button>
+  </div>
+</div>
 
       <div className="exercises-list">
         {workoutExercises?.map(({ workoutExercise, exercise, sets, previousSets }) => (
