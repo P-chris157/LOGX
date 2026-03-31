@@ -58,6 +58,10 @@ button {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+
+  /* ADD THESE: */
+  padding-top: var(--safe-top);
+  scroll-padding-top: var(--safe-top);
 }
 
 .page {

@@ -1,6 +1,6 @@
 .workout-page {
   min-height: 100%;
-  padding: calc(34px + var(--safe-top)) 20px calc(180px + var(--safe-bottom));
+  padding: 34px 20px calc(180px + var(--safe-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
 }
