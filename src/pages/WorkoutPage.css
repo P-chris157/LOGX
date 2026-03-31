@@ -1,8 +1,18 @@
 .workout-page {
   min-height: 100%;
-  padding: calc(34px + var(--safe-top)) 20px calc(180px + var(--safe-bottom));
+  padding: 0 20px calc(180px + var(--safe-bottom));
   color: #f5f7ff;
   background: linear-gradient(180deg, #071033 0%, #040c26 100%);
+}
+
+/* .page-header is already defined globally, so scope it to workout-page */
+.workout-page .page-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: 0 -20px 20px;
+  padding: calc(16px + var(--safe-top)) 20px 16px;
+  background: #071033;
 }
 
 .page-header {
