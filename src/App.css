@@ -58,9 +58,6 @@ button {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
 }
 
 .page {
