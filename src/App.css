@@ -20,16 +20,18 @@
 }
 
 
-html,
-body,
-#root {
-  height: 100%;
+html, body, #root {
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;           /* Prevent any root-level scrolling */
+  position: relative;
 }
 
 body {
   margin: 0;
   background: var(--bg-dark);
   color: var(--text-primary);
+  overscroll-behavior-y: contain;   /* Disable pull-to-refresh / rubber banding globally */
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -47,10 +49,11 @@ button {
 }
 
 .app {
-  height: 100%;
+  height: 100dvh;           /* Use dynamic viewport height instead of 100% */
   display: flex;
   flex-direction: column;
   background: var(--bg-dark);
+  overflow: hidden;         /* Important: stop body-level scroll */
 }
 
 .main-content {
@@ -59,11 +62,15 @@ button {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 
-  /* Constrain the scroll container to the safe viewport */
-  height: 100%;
-  padding-top: var(--safe-top);
-  padding-bottom: calc(72px + var(--safe-bottom)); /* nav height + bottom safe area */
-  box-sizing: border-box;
+  /* Core safe area handling */
+  padding-top: calc(var(--safe-top) + 20px);   /* Extra breathing room above headers */
+  padding-bottom: calc(80px + var(--safe-bottom)); /* For bottom nav + extra margin */
+
+  scroll-padding-top: calc(var(--safe-top) + 20px);
+  scroll-padding-bottom: calc(80px + var(--safe-bottom));
+
+  /* Prevent rubber-band / overscroll into Dynamic Island */
+  overscroll-behavior-y: contain;
 }
 
 .page {
