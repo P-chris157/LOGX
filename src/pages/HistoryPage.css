@@ -247,3 +247,29 @@
     padding-bottom: calc(120px + var(--safe-bottom));
   }
 }
+
+.copy-workout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 18px;
+  background: rgba(91, 136, 255, 0.08);
+  border: 1px dashed rgba(91, 136, 255, 0.3);
+  border-radius: 18px;
+  color: #7aa2ff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.copy-workout-btn:active {
+  background: rgba(91, 136, 255, 0.15);
+}
+
+.copy-workout-btn svg {
+  flex-shrink: 0;
+}

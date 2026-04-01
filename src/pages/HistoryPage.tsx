@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { ChevronRight, Calendar, Trash2, ChevronLeft, Clock3, Dumbbell } from 'lucide-react';
+import { ChevronRight, Calendar, Trash2, ChevronLeft, Clock3, Dumbbell, Copy, Check } from 'lucide-react';
 import { db } from '../db/database';
 import { formatDate } from '../utils/date';
 import { getSettings } from '../utils/settings';
+import { haptic } from '../utils/haptics';
 import './HistoryPage.css';
 
 export function HistoryPage() {
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const settings = getSettings();
 
   const workouts = useLiveQuery(
@@ -32,9 +34,7 @@ export function HistoryPage() {
       workoutExercises.map(async (we) => {
         const exercise = exercises.find(e => e.id === we.exerciseId);
         const sets = await db.sets.where('workoutExerciseId').equals(we.id).sortBy('setNumber');
-
         const volume = sets.reduce((sum, set) => sum + (set.weight * set.reps), 0);
-
         return { exercise, sets, volume };
       })
     );
@@ -53,17 +53,43 @@ export function HistoryPage() {
     if (!confirm('Delete this workout?')) return;
 
     const workoutExercises = await db.workoutExercises.where('workoutId').equals(workoutId).toArray();
-
     for (const we of workoutExercises) {
       await db.sets.where('workoutExerciseId').equals(we.id).delete();
     }
-
     await db.workoutExercises.where('workoutId').equals(workoutId).delete();
     await db.workouts.delete(workoutId);
 
     if (selectedWorkout === workoutId) {
       setSelectedWorkout(null);
     }
+  };
+
+  const handleCopyWorkout = () => {
+    if (!selectedData) return;
+    const { workout, exerciseData, totalSets, totalVolume } = selectedData;
+
+    let text = `Workout: ${workout.name}\n`;
+    text += `Date: ${formatDate(workout.date)}\n`;
+    if (workout.duration) text += `Duration: ${workout.duration} minutes\n`;
+    text += `\n`;
+
+    exerciseData.forEach(({ exercise, sets, volume }) => {
+      if (!exercise) return;
+      text += `${exercise.name}\n`;
+      sets.forEach((set, i) => {
+        text += `  Set ${i + 1}: ${set.weight}${settings.units} × ${set.reps}\n`;
+      });
+      text += `  Volume: ${volume}${settings.units}\n\n`;
+    });
+
+    text += `Total Sets: ${totalSets}\n`;
+    text += `Total Volume: ${totalVolume}${settings.units}\n`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      haptic('success');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   if (selectedWorkout && selectedData) {
@@ -111,6 +137,11 @@ export function HistoryPage() {
           </span>
         </div>
 
+        <button className="copy-workout-btn" onClick={handleCopyWorkout}>
+          {copied ? <Check size={18} /> : <Copy size={18} />}
+          <span>{copied ? 'Copied!' : 'Copy workout to paste into ChatGPT'}</span>
+        </button>
+
         <div className="workout-detail">
           {exerciseData.map(({ exercise, sets, volume }, idx) =>
             exercise ? (
@@ -132,7 +163,6 @@ export function HistoryPage() {
                         <span className="set-info">
                           {set.weight} {settings.units} × {set.reps}
                         </span>
-                        {set.rpe && <span className="rpe">RPE {set.rpe}</span>}
                       </div>
                     </div>
                   ))}
