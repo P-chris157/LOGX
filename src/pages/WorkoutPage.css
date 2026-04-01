@@ -427,6 +427,19 @@
   width: 100%;
 }
 
+.add-set-form input {
+  height: 52px;
+  background: rgba(13, 21, 44, 0.9);
+  border: 1px solid rgba(124, 144, 255, 0.14);
+  border-radius: 16px;
+  padding: 0 14px;
+  color: #f5f7ff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+}
+
 .add-set-form .input-weight,
 .add-set-form .input-reps {
   flex: 1;
