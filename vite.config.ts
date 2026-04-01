@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.svg'],
       manifest: {
-        name: 'FitLog - Workout Tracker',
-        short_name: 'FitLog',
+        name: 'LOGX - Workout Tracker',
+        short_name: 'LOGX',
         description: 'Fast, simple workout tracking that works offline',
         theme_color: '#3b82f6',
         background_color: '#0f172a',
